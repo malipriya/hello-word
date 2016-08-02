@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Library Managment</title>
+<link href="style.css" rel="stylesheet" type="text/css">
+<script src="shelf.js"></script>
+<script src="library.js"></script>
+<script src="book.js"></script>
+<script src="1.12.4.jquery.min.js"></script>
+<script type = "text/javascript" language = "javascript">
+         
+</script>
+</head>
+
+<body>
+<div id="wrapper">
+	<div id="login-section">
+		<label>Username : </label><input type="text" id="username"><br/><br/>
+		<label>Password : </label><input type="text" id="password"><br/><br/>
+		<label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label><input type="submit" value="Submit" onClick="login()">
+	</div>
+	<div id="innerWrapper">
+		<div id="bbbb">
+			<input type="button" value="Add Shelf" onClick="addShelfSection()">
+			<input type="button" value="Add Book" onClick="addBookSection()">
+			<input type="button" value="Show Shelfs" onClick="showShelfsTable()">
+			<input type="button" value="Show Books" onClick="showBooksTable()">
+			<input type="button" value="Search Books" onClick="showSearchTable()">
+		</div>
+		<div id="panel1">
+			<div id="addShelf">
+				Shelf Name : <input type="text" id="snm"><br><br>
+				Shelf Number : <input type="text" id="sNum"><br><br>
+				Shelf Capacity : <input type="text" id="sCap"><br><br>
+				<input type="button" value="ADD" onClick="addShelf()">
+			</div>
+			<div id="addBook">
+				Book Name : <input type="text" id="bnm"><br><br>
+				Book Number : <input type="text" id="bNum"><br><br>
+				Book Author : <input type="text" id="bAuth"><br><br>
+				Select Shelf No :
+				<select id="selectNo">				 
+				 
+				</select> <br><br>
+				<input type="button" value="ADD" onClick="addBook()">
+			</div>
+			<div id="showShelfs">
+				<table border="1" id="shelftable">
+					<!--<tr>
+						<th>Shelf Name</th>
+						<th>Shelf No</th>
+						<th>Shelf Capacity</th>
+					</tr>-->					
+				</table>
+			</div>
+			<div id="showBooks">
+				<table border="1" id="booktable">
+					<!--<tr>
+						<th>Book Name</th>
+						<th>Book No</th>
+						<th>Book Author</th>
+					</tr>-->
+				</table>
+			</div>
+			<div id="showSearch">
+				<label>Search Books : </label><input type="text" id="search"><br/><br/>
+				<input type="button" value="Search" onClick="searchBooks()"><br/><br/>
+				<table border="1" id="searchtable">
+					
+				</table>
+			</div>
+		</div>
+	</div>	
+</div>
+<script>
+function login()
+{
+	var user = document.getElementById("username").value;
+	var pw = document.getElementById("password").value;
+	if(user == pw)
+	{
+		document.getElementById("login-section").style.display = "none";
+		document.getElementById("innerWrapper").style.display = "block";
+	}
+	else
+	{
+		alert("Not Matched");
+	}
+	document.getElementById("username").value = "";
+	document.getElementById("password").value = "";
+}
+
+function addShelfSection()
+{
+	document.getElementById("addShelf").style.display = "block";
+	document.getElementById("addBook").style.display = "none";
+	document.getElementById("showShelfs").style.display = "none";
+	document.getElementById("showBooks").style.display = "none";
+	document.getElementById("showSearch").style.display = "none";	
+}
+function addBookSection()
+{
+	$("#selectNo").empty(); 
+	document.getElementById("addShelf").style.display = "none";
+	document.getElementById("addBook").style.display = "block";
+	document.getElementById("showShelfs").style.display = "none";
+	document.getElementById("showBooks").style.display = "none";
+	document.getElementById("showSearch").style.display = "none";	
+	var x = document.getElementById("selectNo");
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var option = document.createElement("option");
+		x.options[x.options.length] = new Option(lib.shelfs[i].no);		
+	}
+}
+
+var lib = new Library();
+
+function addShelf()
+{
+	var sName = document.getElementById("snm").value;
+	var sNumber = document.getElementById("sNum").value;
+	var sCapacity = document.getElementById("sCap").value;
+	
+	var newShelf = new Shelf(sName,sNumber,sCapacity);
+	lib.addShelf(newShelf);
+	document.getElementById("snm").value = "";
+	document.getElementById("sNum").value = "";
+	document.getElementById("sCap").value = "";
+	alert("shelf added successfully");
+}
+
+function addBook()
+{	
+	var bName = document.getElementById("bnm").value;
+	var bNumber = document.getElementById("bNum").value;
+	var bAuthor = document.getElementById("bAuth").value;	
+	//selectNo.empty();
+	var sel = document.getElementById("selectNo");	
+	var selectedValue = sel.options[sel.selectedIndex].value;
+	var selectedShelf = lib.getShelf(selectedValue);
+	var newBook = new Book(bName,bNumber,bAuthor);	
+	
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var oneShelf = lib.shelfs[i];
+		for(var j = 0; j < oneShelf.books.length; j++)
+		{
+			if(bNumber == oneShelf.books[j].number)
+			{
+				alert("same books no are not allowed.");
+				return;	
+			}
+		}	
+	}
+	
+	if(selectedShelf.books.length >= selectedShelf.cap)
+	{
+		alert("Not available space");		
+	}	
+	else
+	{	
+		/*checkBookNo(bNumber);*/		
+		selectedShelf.addBook(newBook);
+		alert("Book added successfully");
+	}
+		
+	document.getElementById("bnm").value = "";
+	document.getElementById("bNum").value = "";
+	document.getElementById("bAuth").value = "";
+	
+}
+/*function checkBookNo(bookNum)
+{
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var oneShelf = lib.shelfs[i];
+		for(var j = 0; j < oneShelf.books.length; j++)
+		{
+			if(bookNum == oneShelf.books[j].number)
+			{
+				alert("same books no are not allowed.");
+				return;	
+			}
+		}	
+	}
+}
+*/
+
+function showShelfsTable()
+{          
+    $("#shelftable").empty();          
+	var table = document.getElementById("shelftable");
+	var header = table.createTHead();
+	var headrow = header.insertRow();
+    var thcell1 = headrow.insertCell(0);
+	var thcell2 = headrow.insertCell(1);
+	var thcell3 = headrow.insertCell(2);
+	var thcell4 = headrow.insertCell(3);
+    thcell1.innerHTML = "<b>Shelf Name</b>";
+	thcell2.innerHTML = "<b>Shelf No</b>";
+	thcell3.innerHTML = "<b>Shelf Capacity</b>";
+	thcell4.innerHTML = "<b>Shelf Remove</b>";
+	
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var row = table.insertRow();
+		var cell1 = row.insertCell(0);
+		var cell2 = row.insertCell(1);
+		var cell3 = row.insertCell(2);
+		var cell4 = row.insertCell(3);
+		var shelfname = lib.shelfs[i].name;
+		cell1.innerHTML = lib.shelfs[i].name;
+		cell2.innerHTML = lib.shelfs[i].no;
+		cell3.innerHTML = lib.shelfs[i].cap;
+		cell4.innerHTML = '<p onclick="removeShelf(\''+shelfname+'\');">Remove</p>';
+	}	
+	document.getElementById("addShelf").style.display = "none";
+	document.getElementById("addBook").style.display = "none";
+	document.getElementById("showShelfs").style.display = "block";
+	document.getElementById("showBooks").style.display = "none";
+	document.getElementById("showSearch").style.display = "none";
+}
+function showBooksTable()
+{	
+	$("#booktable").empty();	          
+	var table = document.getElementById("booktable");
+	var header = table.createTHead();
+	var headrow = header.insertRow();
+    var thcell1 = headrow.insertCell(0);
+	var thcell2 = headrow.insertCell(1);
+	var thcell3 = headrow.insertCell(2);
+	var thcell4 = headrow.insertCell(3);
+	var thcell5 = headrow.insertCell(4);
+    thcell1.innerHTML = "<b>Book Name</b>";
+	thcell2.innerHTML = "<b>Book No</b>";
+	thcell3.innerHTML = "<b>Book Author</b>";
+	thcell4.innerHTML = "<b>Book Remove</b>";
+	thcell5.innerHTML = "<b>Shelf No</b>";	
+	
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var oneShelf = lib.shelfs[i];
+		for(var j = 0; j < oneShelf.books.length; j++)
+		{
+			var row = table.insertRow();
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			var cell3 = row.insertCell(2);
+			var cell4 = row.insertCell(3);
+			var cell5 = row.insertCell(4);
+			var bookno = oneShelf.books[j].number;
+			cell1.innerHTML = oneShelf.books[j].name;
+			cell2.innerHTML = oneShelf.books[j].number;
+			cell3.innerHTML = oneShelf.books[j].author;
+			cell4.innerHTML = '<p onclick="removeBook(\''+bookno+'\');">Remove</p>'
+			cell5.innerHTML = oneShelf.no;
+		}		
+	}	
+	document.getElementById("addShelf").style.display = "none";
+	document.getElementById("addBook").style.display = "none";
+	document.getElementById("showShelfs").style.display = "none";
+	document.getElementById("showBooks").style.display = "block";
+	document.getElementById("showSearch").style.display = "none";
+}
+function showSearchTable()
+{	
+	document.getElementById("addShelf").style.display = "none";
+	document.getElementById("addBook").style.display = "none";
+	document.getElementById("showShelfs").style.display = "none";
+	document.getElementById("showBooks").style.display = "none";
+	document.getElementById("showSearch").style.display = "block";
+}
+function searchBooks()
+{
+	$("#searchtable").empty();          
+	var table = document.getElementById("searchtable");
+	var header = table.createTHead();
+	var headrow = header.insertRow();
+    var thcell1 = headrow.insertCell(0);	
+    thcell1.innerHTML = "<b>Book Name</b>";
+	
+	var searchValue = document.getElementById("search").value;
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var oneShelf = lib.shelfs[i];
+		for(var j = 0; j < oneShelf.books.length; j++)
+		{
+			var oneBook = oneShelf.books[j].name;
+			if(oneBook.search(searchValue) !== -1)
+			{
+				var row = table.insertRow();
+				var cell1 = row.insertCell();
+				cell1.innerHTML = oneBook;
+			}
+		}
+	}
+}
+/*function removeBook(booknm)
+{
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var oneShelf = lib.shelfs[i];
+		for(var j = 0; j < oneShelf.books.length; j++)
+		{
+			if(oneShelf.books[j].name == booknm)
+			{
+				oneShelf.books.splice(j,1);
+			}						
+		}		
+	}
+	showBooksTable();	
+}*/
+function removeBook(bookno)
+{
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		var oneShelf = lib.shelfs[i];
+		for(var j = 0; j < oneShelf.books.length; j++)
+		{
+			if(oneShelf.books[j].number == bookno)
+			{
+				oneShelf.books.splice(j,1);
+			}						
+		}		
+	}
+	showBooksTable();	
+}
+function removeShelf(shelfnm)
+{
+	for(var i = 0; i < lib.shelfs.length; i++)
+	{
+		lib.shelfs.splice(i,1);				
+	}
+	showShelfsTable();	
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* CSS Document */
+*
+{
+	padding:0px;
+	margin:0px;
+}
+#wrapper
+{
+	background: url(header-bg.jpg) repeat;
+}
+#login-section
+{
+	/*border:1px solid #cccccc;*/
+	width:300px;
+	margin:0px auto;
+	padding:330px 15px;	
+}
+input[type="text"]
+{
+	border-radius: 4px;
+	border:none;
+	height:27px;
+	padding:2px 5px;
+}
+input[type="submit"]
+{
+	border-radius: 4px;
+	border:none;
+	padding:5px 30px;
+	width:100px;
+	margin:0px auto;	
+}
+input[type="button"]
+{
+	border-radius: 4px;
+	border:none;
+	padding:5px 28px;
+	background:#003333;
+	color:#FFFFFF;	
+}
+#selectNo
+{
+	width:150px;
+}
+#innerWrapper
+{
+	display:none;
+	width:650px;
+	margin:0px auto;
+	padding:200px 10px;
+	/*border:1px solid #99CC99;*/
+}
+#panel1
+{
+	margin:80px 20px 0px 30px;
+}
+#addShelf,#addBook,#showShelfs,#showBooks,#showSearch
+{
+	display:none;
+}
+table th, table td
+{
+	padding:5px 7px;
+	/*border:0;*/
+}
+
