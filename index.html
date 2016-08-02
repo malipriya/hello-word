@@ -8,7 +8,7 @@
 <script src="library.js"></script>
 <script src="book.js"></script>
 <script src="1.12.4.jquery.min.js"></script>
-<script type = "text/javascript" language = "javascript">
+<script type="text/javascript" language="javascript">
          
 </script>
 </head>
@@ -140,27 +140,18 @@ function addBook()
 	var selectedValue = sel.options[sel.selectedIndex].value;
 	var selectedShelf = lib.getShelf(selectedValue);
 	var newBook = new Book(bName,bNumber,bAuthor);	
-	
-	for(var i = 0; i < lib.shelfs.length; i++)
-	{
-		var oneShelf = lib.shelfs[i];
-		for(var j = 0; j < oneShelf.books.length; j++)
-		{
-			if(bNumber == oneShelf.books[j].number)
-			{
-				alert("same books no are not allowed.");
-				return;	
-			}
-		}	
-	}
+	var noCheck;
 	
 	if(selectedShelf.books.length >= selectedShelf.cap)
 	{
 		alert("Not available space");		
 	}	
+	else if(noCheck)
+	{
+		 checkBookNo(bNumber);
+	}
 	else
 	{	
-		/*checkBookNo(bNumber);*/		
 		selectedShelf.addBook(newBook);
 		alert("Book added successfully");
 	}
@@ -170,7 +161,7 @@ function addBook()
 	document.getElementById("bAuth").value = "";
 	
 }
-/*function checkBookNo(bookNum)
+function checkBookNo(bookNum)
 {
 	for(var i = 0; i < lib.shelfs.length; i++)
 	{
@@ -179,14 +170,12 @@ function addBook()
 		{
 			if(bookNum == oneShelf.books[j].number)
 			{
-				alert("same books no are not allowed.");
-				return;	
+				return true;	
 			}
 		}	
 	}
+	return false;
 }
-*/
-
 function showShelfsTable()
 {          
     $("#shelftable").empty();          
