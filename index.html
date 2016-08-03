@@ -140,18 +140,15 @@ function addBook()
 	var selectedValue = sel.options[sel.selectedIndex].value;
 	var selectedShelf = lib.getShelf(selectedValue);
 	var newBook = new Book(bName,bNumber,bAuthor);	
-	var noCheck;
+	var noCheck;	
 	
 	if(selectedShelf.books.length >= selectedShelf.cap)
 	{
 		alert("Not available space");		
-	}	
-	else if(noCheck)/*for number checking*/
-	{
-		 checkBookNo(bNumber);
-	}
+	}		
 	else
-	{	
+	{
+		checkBookNo(bNumber);	
 		selectedShelf.addBook(newBook);
 		alert("Book added successfully");
 	}
@@ -285,21 +282,7 @@ function searchBooks()
 		}
 	}
 }
-/*function removeBook(booknm)
-{
-	for(var i = 0; i < lib.shelfs.length; i++)
-	{
-		var oneShelf = lib.shelfs[i];
-		for(var j = 0; j < oneShelf.books.length; j++)
-		{
-			if(oneShelf.books[j].name == booknm)
-			{
-				oneShelf.books.splice(j,1);
-			}						
-		}		
-	}
-	showBooksTable();	
-}*/
+
 function removeBook(bookno)
 {
 	for(var i = 0; i < lib.shelfs.length; i++)
