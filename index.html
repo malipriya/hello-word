@@ -142,6 +142,10 @@ function addBook()
 	if(selectedShelf.books.length >= selectedShelf.cap)
 	{
 		alert("Not available space");		
+	}
+	else if(checkBookNo(bNumber))
+	{
+		alert("Same book numbers are not allowed");
 	}		
 	else
 	{
